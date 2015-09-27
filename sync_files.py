@@ -1,27 +1,27 @@
 #!/usr/bin/python
 
 ##################################################################################
-##										                                        ##
-##    Este es un script para sincronizar los archivos de dos directorios 	    ##
-##    Copyright (C) 2015  Eduardo Parra Mazuecos				                ##
-##										                                        ##
-##    This software is free software: you can redistribute it and/or modify		##
-##    it under the terms of the GNU General Public License as published by	    ##
-##    the Free Software Foundation, version 3 of the License, 			        ##
-##    or any later version.					                                    ##
-##										                                        ##
-##    This program is distributed in the hope that it will be useful,		    ##
-##    but WITHOUT ANY WARRANTY; without even the implied warranty of		    ##
-##    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the		        ##
-##    GNU General Public License for more details.				                ##
-##										                                        ##
-##    You should have received a copy of the GNU General Public License		    ##
+##									        ##
+##    Este es un script para sincronizar los archivos de dos directorios        ##
+##    Copyright (C) 2015  Eduardo Parra Mazuecos			        ##
+##									        ##
+##    This software is free software: you can redistribute it and/or modify     ##
+##    it under the terms of the GNU General Public License as published by	##
+##    the Free Software Foundation, version 3 of the License, 			##
+##    or any later version.					                ##
+##										##
+##    This program is distributed in the hope that it will be useful,		##
+##    but WITHOUT ANY WARRANTY; without even the implied warranty of		##
+##    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the		##
+##    GNU General Public License for more details.				##
+##										##
+##    You should have received a copy of the GNU General Public License		##
 ##    along with this program.  If not, see <http://www.gnu.org/licenses/>. 	##
-##										                                        ##
-##   MegaUp version 0.1, Copyright (C) 2015 Eduardo Parra Mazuecos		        ##
-##   email: eduparra90@gmail.com		                  			            ##
-##   Website: http://www.eduardoparra.es 					                    ##
-##										                                        ##
+##										##
+##   MegaUp version 0.1, Copyright (C) 2015 Eduardo Parra Mazuecos		##
+##   email: eduparra90@gmail.com		                  		##
+##   Website: http://www.eduardoparra.es 					##
+##										##
 ##################################################################################
 
 from gi.repository import Gtk
