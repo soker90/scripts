@@ -23,12 +23,20 @@
 ##   Website: http://www.eduardoparra.es 					                    ##
 ##										                                        ##
 ##################################################################################
-
+import gi
+gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
+import os
         
 class main(Gtk.Window):
 	def __init__(self):
-		Gtk.Window.__init__(self, title="jj")
+		rutas_origen = ["/home/directorio1/","/"] #Rutas de la carpeta de origen
+		rutas_destino = ["/home/directorio2", "/"]  # Rutas de la carpeta de destino
+		self.origen = None
+		self.destino = None
+
+
+		Gtk.Window.__init__(self, title="Sincronizador de directorios")
 		self.set_border_width(10)
 		
 		vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
@@ -44,41 +52,50 @@ class main(Gtk.Window):
 		label = Gtk.Label("Licencia GNU GPLv3 o superior.\n") 
 		label.set_justify(Gtk.Justification.FILL)
 		vbox.pack_start(label, True, True, 0)
-		
-		self.progressbar = Gtk.ProgressBar()
-		vbox.pack_start(self.progressbar, True, True, 0)
-		label = Gtk.Label("") 
-		vbox.pack_start(label, True, True, 0)
+
 		
 		label = Gtk.Label("Ruta del directorio de orígen:")
 		vbox.pack_start(label, True, True, 0)
-		
-		lista_origen = Gtk.ListStore(int, str)
-		lista_origen.append([1,"/home/$user"])
-		lista_origen.append([2,"/boot"])
-        
-		combo_origen = Gtk.ComboBox.new_with_model_and_entry(lista_origen)
-		#name_combo.connect("changed", self.on_name_combo_changed)
-		combo_origen.set_entry_text_column(1)
+
+		combo_origen = Gtk.ComboBoxText()
+		combo_origen.set_entry_text_column(0)
+		combo_origen.connect("changed", self.origenSeleccionado)
+		for currency in rutas_origen:
+			combo_origen.append_text(currency)
 		vbox.pack_start(combo_origen, False, False, 0)
-		
+
+
 		label = Gtk.Label("Ruta del directorio de destino:")
 		vbox.pack_start(label, True, True, 0)
-		
-		lista_destino = Gtk.ListStore(int, str)
-		lista_destino.append([1,"aaa"])
-		lista_destino.append([2,"sss"])
-		
-		combo_destino = Gtk.ComboBox.new_with_model_and_entry(lista_destino)
-		#name_combo.connect("changed", self.on_name_combo_changed)
-		combo_destino.set_entry_text_column(1)
+
+		combo_destino = Gtk.ComboBoxText()
+		combo_destino.set_entry_text_column(0)
+		combo_destino.connect("changed", self.origenDestino)
+		for currency in rutas_destino:
+			combo_destino.append_text(currency)
 		vbox.pack_start(combo_destino, False, False, 0)
-		
-		button = Gtk.Button(label="¡Sincronizar!")
-		label.set_mnemonic_widget(button)
+
+		button = Gtk.Button.new_with_label("¡Sincronizar!")
+		button.connect("clicked", self.sincronizar)
 		vbox.pack_start(button, True, True, 0)
-		
-	
+
+
+	def sincronizar(self,button):
+		if self.origen !=None and self.destino != None:
+			print("hshhs")
+			os.system('rsync -avzP "' + self.origen + '" "' + self.destino + '"')
+
+	def origenSeleccionado(self,combo):
+		text = combo.get_active_text()
+		if text != None:
+			self.origen = text
+
+	def origenDestino(self,combo):
+		text = combo.get_active_text()
+		if text != None:
+			self.destino = text
+
+
 win = main()
 win.connect("delete-event", Gtk.main_quit)
 win.show_all()
