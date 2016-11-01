@@ -1,0 +1,961 @@
+#!/bin/bash
+
+clear
+
+############### Instalacion de hamachi para Ubuntu #######################
+
+##########################################################################
+
+### INSTALACION ###
+### hamachi (ghamachi y hamachi-gui) ###
+DESCARGA=http://files.hamachi.cc/linux/hamachi-0.9.9.9-20-lnx.tar.gz
+PAQUETE=hamachi-0.9.9.9-20-lnx.tar.gz
+VERSION=hamachi-0.9.9.9-20-lnx
+
+
+### ghamachi ###
+DESCARGAGHAMACI=http://harvie.cz/wan/tools/hamachi/gHamachi_0.8.1.tar.gz
+GHAMACHIICON=http://wonsheimlan.wo.funpic.de/hamachi.png
+GHAMACHIVERSION=gHamachi.tar.gz
+
+
+### hamachi-gui - i386 ###
+DESCARGAHAMACHIGUII386=http://internap.dl.sourceforge.net/sourceforge/hamachi-gui/hamachi-gui_0.9.6-1_i386-hardy.deb
+
+### hamachi-gui - amd64 ###
+DESCARGAHAMACHIGUIAMD64=http://internap.dl.sourceforge.net/sourceforge/hamachi-gui/hamachi-gui_0.9.6-1_amd64-hardy.deb
+
+
+### hamachi (quamachi) ###
+DESCARGA2=http://quamachi.googlecode.com/files/hamachi_0.9.9.9-20_i386.deb
+
+### quamachi ###
+DESCARGAQUAMACHI=http://quamachi.googlecode.com/files/quamachi_0.4.1-1_i386.deb
+
+### haguichi ###
+DESCARGARHAGUICHI=http://launchpad.net/haguichi/1.0/1.0.1/+download/haguichi_1.0.1_all.deb
+
+
+############################################################
+
+### Eliminar TUN de /etc/modules ###
+function QUITARTUN
+{
+	find /etc/modules -exec sed -i '/tun/d' {} \;
+}
+
+### Instalar Hamachi ###
+function INSTALARHAMACHI
+{
+	if [ ! -r /usr/bin/hamachi ];
+		then
+		sleep 1
+		echo "Instalando programas requeridos..."
+		echo
+
+			if [ `uname -m` = x86_64 ];
+				then
+				sudo apt-get -y install build-essential ia32-libs upx-ucl
+			else
+				sudo apt-get -y install build-essential upx-ucl
+			fi
+
+		echo
+		sleep 1
+		sudo modprobe tun
+		sudo bash -c "echo tun >> /etc/modules"
+		cd /home/$USER
+		wget $DESCARGA
+		sleep 1
+		tar -zxvf $PAQUETE
+		cd $VERSION
+		sleep 1
+		sudo make install
+		cd /usr/bin
+		sleep 1
+		sudo upx -d hamachi
+		sleep 1
+		cd /home/$USER
+		rm $PAQUETE
+		rm -Rv $VERSION
+		sleep 1
+		echo
+		echo "Configurando grupos y creando pares de llaves RSA."
+		sudo /sbin/tuncfg
+		sleep 1
+		echo
+		echo "Creando grupo de hamachi..."
+		sudo groupadd hamachi
+		sleep 1
+		echo
+		echo "Incorporando root al grupo de hamachi..."
+		sudo gpasswd -a root hamachi
+		sleep 1
+		echo
+		echo "Incorporando $USER al grupo de hamachi..."
+		sudo gpasswd -a $USER hamachi
+		sleep 1
+		echo
+		if [ ! -d /home/$USER/.hamachi/ ];
+			then
+			echo "Creando pares de llaves RSA..."
+			sleep 1
+			hamachi-init
+		fi
+		sleep 1
+		sudo chown -R $USER:$USER ~/.hamachi
+		echo
+		if [ "$?" = "0" ];
+			then
+			echo "Enhorabuena, hamachi ha sido instalado"
+			echo
+			read -p "Pulsa Enter para continuar " var
+			sleep 1
+			sudo chmod 760 /var/run/tuncfg.sock
+			sudo chgrp hamachi /var/run/tuncfg.sock
+			clear
+		fi
+	else
+		echo
+		echo "*** hamachi ya esta instalado ***"
+		echo
+	fi
+}
+
+
+
+
+### Revisar si hamachi ya esta instalado ###
+function HAMACHIINSTALADO
+{
+	if [ ! -r /usr/bin/hamachi ];
+		then
+		clear
+		echo
+		echo "*** Instalar hamachi antes de continuar ***"
+		echo
+		read -p "Pulsa Enter para salir " var
+		echo
+		exit 1
+	fi
+}
+
+### Comprobar si la carpeta .hamachi esiste ###
+function CARPETAHAMACHI
+{
+	if [ ! -d /home/$USER/.hamachi ];
+		then
+		clear
+		echo
+		echo "*** /home/$USER/.hamachi no existe ***"
+		echo
+		break
+	fi
+	sleep 1
+}
+
+### Comprobar si ghamachi esta instalado ###
+function GHAMACHIINSTALADO
+{
+	if [ ! -r /usr/bin/ghamachi ];
+		then
+		clear
+		echo
+		echo "*** ghamachi no esta instalado ***"
+		echo
+		break
+	fi
+	sleep 1
+}
+
+### Comprobar si hamachi-gui esta instalado ###
+function HAMACHIGUIINSTALADO
+{
+	if [ ! -r /usr/bin/hamachi-gui ];
+		then
+		clear
+		echo
+		echo "*** hamachi-gui no esta instalado ***"
+		echo
+		break
+	fi
+	sleep 1
+}
+
+### Comprobar si haguichi esta instalado ###
+function HAGUICHIINSTALADO
+{
+	if [ ! -r /usr/local/bin/haguichi ];
+		then
+		clear
+		echo
+		echo "*** haguichi no esta instalado ***"
+		echo
+		break
+	fi
+	sleep 1
+}
+
+### Comprobar si la carpeta autostart esiste ###
+function CARPETAAUTOSTART
+{
+	if [ ! -d /home/$USER/.config/autostart/ ];
+		then
+		mkdir /home/$USER/.config/autostart/
+	fi
+	sleep 1
+}
+
+### Crear ghamachi.desktop ###
+function GHAMACHIDESKTOP
+{
+	if [ ! -e /usr/share/applications/ghamachi.desktop ];
+		then
+		sudo bash -c "echo '[Desktop Entry]' > /usr/share/applications/ghamachi.desktop"
+		sudo bash -c "echo 'Name=gHamachi' >> /usr/share/applications/ghamachi.desktop"
+		sudo bash -c "echo 'Exec=ghamachi' >> /usr/share/applications/ghamachi.desktop"
+		sudo bash -c "echo 'Icon=/usr/share/pixmaps/hamachi.png' >> /usr/share/applications/ghamachi.desktop"
+		sudo bash -c "echo 'Type=Application' >> /usr/share/applications/ghamachi.desktop"
+		sudo bash -c "echo 'Categories=Network;Application;' >> /usr/share/applications/ghamachi.desktop"
+		sudo bash -c "echo 'Comment=Instant VPN software' >> /usr/share/applications/ghamachi.desktop"
+	fi
+}
+
+### Crear binarios /etc/init.d/tuncfg ###
+function CREARTUNCFG
+{
+	if [ ! -e /etc/init.d/tuncfg ];
+		then
+		sudo bash -c "echo '#! bin/sh' > /etc/init.d/tuncfg"
+		sudo bash -c "echo '# /etc/init.d/tuncfg' >> /etc/init.d/tuncfg"
+		sudo bash -c "echo '/sbin/tuncfg' >> /etc/init.d/tuncfg"
+		echo
+		sudo chmod 755 /etc/init.d/tuncfg
+		sudo update-rc.d tuncfg defaults
+		echo
+	fi
+}
+
+### Copia de seguridad hamachi ###
+function COPIAHAMACHI
+{
+	echo
+	echo "Buscando sistemas de usuarios..."
+	echo
+	cat /etc/passwd | grep "/bin/bash" | cut -d: -f1
+	echo
+	echo -n "¿De que sistema de usuario necesita hacer copias de seguridad? "
+	read COPIARARCHIVOS
+	if [ "$COPIARARCHIVOS" = "root" ];
+		then
+		echo
+		echo "Copias de seguridad de los archivos de hamachi de $COPIARARCHIVOS en el Escritorio..."
+		echo
+		sudo tar -cvpzf /home/$USER/Desktop/hamachi_backup_root.tar.gz /root/.hamachi
+		sleep 1
+		sudo chown $USER:$USER /home/$USER/Desktop/hamachi_backup_root.tar.gz
+		echo
+	else
+		echo
+		echo "Copias de seguridad de los archivos de hamachi de $COPIARARCHIVOS en el Escritorio...."
+		echo
+		sudo tar -cvpzf /home/$USER/Desktop/hamachi_backup.tar.gz /home/$COPIARARCHIVOS/.hamachi
+		sleep 1
+		sudo chown $USER:$USER /home/$USER/Desktop/hamachi_backup.tar.gz
+		echo
+	fi
+}
+
+### Eliminar hamachi ###
+function ELIMINARHAMACHI
+{
+	echo
+	echo "Deteniendo hamachi..."
+	sudo hamachi stop
+	echo
+	sudo rm -fv /usr/bin/hamachi-init
+	sudo rm -fv /usr/bin/hamachi
+	sudo rm -fv /sbin/tuncfg
+	echo
+	echo "Eliminando grupos de hamachi..."
+	echo
+	sudo groupdel hamachi
+	sudo find /var/run -type f -name "tuncfg.*" -exec rm -f {} \;
+	sudo find /etc/modules -exec sed -i '/tun/d' {} \;
+	echo
+	echo -n "¿Desea eliminar los archivos de usuario de hamachi? (s/n): "
+	read respuesta
+	if [ "$respuesta" = "s" ];
+		then
+		echo
+		echo "Buscando sistemas de usuario..."
+		echo
+		cat /etc/passwd | grep "/bin/bash" | cut -d: -f1
+		echo
+		echo -n "¿Que archivos del sistema de usuario de hamachi quiere eliminar?: "
+		read ELIMINARARCHIVOS
+		if [ "$ELIMINARARCHIVOS" = "root" ];
+			then
+			echo
+			echo "Eliminando archivos de hamachi de $ELIMINARARCHIVOS ..."
+			sudo rm -Rvf /root/.hamachi
+			echo
+		else
+			echo
+			echo "Eliminando archivos de hamachi de $ELIMINARARCHIVOS ..."
+			sudo rm -Rvf /home/$ELIMINARARCHIVOS/.hamachi
+			echo
+		fi
+	fi		
+}
+
+
+
+################ Empezar Script ################ 
+
+################  Menu ################
+
+menu=
+until [ "$menu" = "0" ]; do
+	clear
+	echo
+	echo "Script mantenido por soker		site:portalubuntu.blogspot.com"
+	echo
+	echo "version 1.2.4"
+	echo "-------------------------------------------------------------"
+	echo "Instalar o eliminar hamachi en Ubuntu"
+	echo "-------------------------------------------------------------"
+	echo
+	echo "1. Instalar hamachi para Ubuntu `lsb_release -r -s` - `uname -m`"
+	echo "2. Instalar haguichi - (requiere el punto 1)"
+	echo "3. Instalar ghamachi - (requiere el punto 1)"
+	echo "4. Instalar hamachi-gui - (requiere el punto 1)"
+	echo "5. Instalar hamachi y quamachi - (hamachi independiente al del 1)"
+	echo "6. Copia de seguridad, restaurar y/o eliminar hamachi"
+	echo "0. Salir"
+	echo
+	echo "-------------------------------------------------------------"
+	echo
+	echo -n "Selecione un numero [0-6]: "
+read opcion
+
+echo
+
+case $opcion in
+
+################ Instalar y configurar hamachi ################
+	1 )
+	clear
+	echo
+	echo -n "¿Instalar programas requeridos para hamachi? (s/n): "
+	read respuesta
+	if [ "$respuesta" = "s" ];
+		then
+		echo
+		INSTALARHAMACHI
+		echo
+	else
+		echo
+		QUITARTUN
+		echo "hamachi no ha sido instalado"
+		echo
+	fi
+	;;
+
+################ Instalar haguichi ################
+	2 )
+	clear
+	HAMACHIINSTALADO
+	echo
+	echo -n "¿Instalar haguichi? (s/n): "
+	read respuesta
+	if [ "$respuesta" = "s" ];
+		then
+		echo
+		echo "Instalando dependencias..."
+		echo
+		sudo apt-get -y install mono-runtime libmono-system2.0-cil libmono-posix2.0-cil libgtk2.0-cil libgnome2.24-cil libglib2.0-cil libgconf2.0-cil libndesk-dbus1.0-cil libnotify0.4-cil
+		cd
+		wget $DESCARGARHAGUICHI
+		sleep 1
+		if [ `uname -m` = x86_64 ]; 
+			then
+			sudo dpkg -i --force-architecture haguichi*
+		else
+			sudo dpkg -i haguichi*
+		fi
+		echo
+		rm haguichi*
+		if [ "$?" = "0" ];
+			then
+			echo
+			echo "Hecho, haguichi ha sido instalado!"
+			echo
+			echo "Haguichi está en Aplicaciones -> Internet -> hamguichi"
+			echo
+			echo
+			echo "*** Para la configuracion de arranque, cierre la sesion y vuelva a abrirla ***"
+			echo
+			sleep 1
+			sudo chown -R $USER:$USER ~/.hamachi
+			echo
+			read -p "Pulse Enter para continuar " var
+			echo
+			echo -n "¿Quiere cargar haguichi al arracar el sistema? (s/n): "
+			read respuesta
+			if [ "$respuesta" = "s" ];
+				then
+				echo
+				CREARTUNCFG
+				echo
+				echo
+				sudo chmod 755 /etc/init.d/tuncfg
+				sudo update-rc.d tuncfg defaults
+				echo
+				echo "Incorporando haguichi a Aplicaciones al inicio - [Sistema -> Preferencias -> Aplicaciones al inicio]"
+				CARPETAAUTOSTART
+				ln -s /usr/local/share/applications/haguichi.desktop ~/.config/autostart/
+				sleep 1
+				if [ "$?" = "0" ];
+					then
+					echo
+					echo "Hecho, haguichi cargará al arrancar el sistema"
+					echo
+					echo
+					echo "*** Para la configuración de arranque, cierre la sesión y vuelva a abrirla ***"
+					echo
+					echo
+					read -p "Pulse Enter para continuar " var
+				else
+					echo
+					echo "No se ha podido incorporar haguichi en el arranque del sistema."
+					echo
+				fi
+			fi
+		fi
+	else
+		echo
+		echo "haguichi no ha sido instalado"
+		echo
+	fi
+	;;	
+
+################ Instalar ghamachi ################     
+	3 )
+	clear
+	HAMACHIINSTALADO
+	echo
+	echo -n "¿Instalar ghamachi? (s/n): "
+	read respuesta
+	if [ "$respuesta" = "s" ];
+		then
+		echo
+		echo "Instalando programas adicionales para ghamachi..."
+		echo
+		sudo apt-get -y install gnome-rdp
+		sleep 1
+		echo
+		echo
+		mkdir /home/$USER/ghamchidownload/
+		wget -O /home/$USER/ghamchidownload/$GHAMACHIVERSION "$DESCARGAGHAMACI"
+		tar -zxvf /home/$USER/ghamchidownload/$GHAMACHIVERSION -C /home/$USER/ghamchidownload/
+		wget -O /home/$USER/ghamchidownload/hamachi.png "$GHAMACHIICON"
+		sudo mv /home/$USER/ghamchidownload/hamachi.png /usr/share/pixmaps/
+		sudo mv /home/$USER/ghamchidownload/ghamachi /usr/bin/
+		sudo chmod +x /usr/bin/ghamachi
+		GHAMACHIDESKTOP
+		rm -fR /home/$USER/ghamchidownload
+		echo
+		if [ "$?" = "0" ];
+			then
+			echo
+			echo "Hecho, ghamachi instalado"
+			echo
+			echo "El incono esta en - [Aplicaciones -> Internet -> gHamachi]"
+			echo
+			echo
+			echo "*** Para la configuracion de arranque, cierre la sesion y vuelva a abrirla ***"
+			sleep 1
+			echo
+			sudo chown -R $USER:$USER ~/.hamachi
+			echo
+			read -p "Pulse Enter para continuar " var
+			echo
+			echo -n "¿Quiere cargar ghamachi al arracar el sistema? (s/n): "
+			read respuesta
+			if [ "$respuesta" = "s" ];
+				then
+				echo
+				CREARTUNCFG
+				echo
+				echo
+				sudo chmod 755 /etc/init.d/tuncfg
+				sudo update-rc.d tuncfg defaults
+				echo
+				echo "Incorporando ghamachi a Aplicaciones al inicio - [Sistema -> Preferencias -> Aplicaciones al inicio]"
+				CARPETAAUTOSTART
+				sudo cp /usr/share/applications/ghamachi.desktop /home/$USER/.config/autostart/
+				sleep 1
+				sudo chown -R $USER:$USER /home/$USER/.config/autostart/ghamachi.desktop
+				if [ "$?" = "0" ];
+					then
+					echo
+					echo "Hecho, ghamachi se cargara al arrancar el sistema"
+					echo
+					echo
+					echo "*** Para la configuracion de arranque, cierre la sesion y vuelva a abrirla ***"
+					echo
+					echo
+					read -p "Pulse Enter para continuar " var
+				else
+					echo
+					echo "No se pudo incorporar ghamachi al arranque del sistema."
+					echo
+				fi
+			fi
+		fi
+	else	
+		echo
+		echo "ghamachi no ha sido instalado"
+		echo
+	fi
+	;;
+
+################ Instalar hamachi-gui ################
+	4 )
+	clear
+	HAMACHIINSTALADO
+	echo
+	echo -n "¿Instalar hamachi-gui? (s/n): "
+	read respuesta
+	if [ "$respuesta" = "s" ];
+		then
+		echo
+		cd /home/$USER
+		if [ `uname -m` = x86_64 ]; 
+			then
+			wget $DESCARGAHAMACHIGUIAMD64
+			sleep 1
+			sudo dpkg -i hamachi-gui*
+		else
+			wget $DESCARGAHAMACHIGUII386
+			sleep 1				
+			sudo dpkg -i hamachi-gui*
+			if [ "$?" = "0" ];
+				then
+				echo
+				echo "hamachi-gui ha sido instalado"
+				echo
+				echo
+			else
+				echo
+				echo "No se ha podido instalar hamachi-gui."
+				echo
+			fi
+		fi
+		echo
+		sudo apt-get -y install gnome-rdp
+		echo
+		rm hamachi-gui*
+		if [ "$?" = "0" ];
+			then
+			echo
+			echo "Hecho, hamachi-gui ha sido instalado!"
+			echo
+			echo "Hamachi-gui esta en - [Aplicaciones -> Internet -> hamachi-gui]"
+			echo
+			echo
+			echo "*** Para la configuracion de arranque, cierre la sesion y vuelva a abrirla ***"
+			echo
+			sleep 1
+			sudo chown -R $USER:$USER ~/.hamachi
+			echo
+			read -p "Pulse Enter para continuar " var
+			echo
+			echo -n "¿Quiere cargar hamachi-gui al arracar el sistema? (s/n): "
+			read respuesta
+			if [ "$respuesta" = "s" ];
+				then
+				echo
+				CREARTUNCFG
+				echo
+				echo
+				sudo chmod 755 /etc/init.d/tuncfg
+				sudo update-rc.d tuncfg defaults
+				echo
+				echo "Incorporando hamachi-gui a Aplicaciones al inicio - [Sistema -> Preferencias -> Aplicaciones al inicio]"
+				CARPETAAUTOSTART
+				sudo cp /usr/share/applications/hamachi-gui.desktop /home/$USER/.config/autostart/
+				sleep 1
+				sudo chown -R $USER:$USER /home/$USER/.config/autostart/hamachi-gui.desktop
+				if [ "$?" = "0" ];
+					then
+					echo
+					echo "Hecho, hamachi-gui cargara al arrancar el sistema"
+					echo
+					echo
+					echo "*** Para la configuracion de arranque, cierre la sesion y vuelva a abrirla ***"
+					echo
+					echo
+					read -p "Pulse Enter para continuar " var
+				else
+					echo
+					echo "No se ha podido incorporar hamachi-gui en el arranque del sistema."
+					echo
+				fi
+			fi
+		fi
+	else
+		echo
+		echo "hamachi-gui no ha sido instalado"
+		echo
+	fi
+	;;
+
+############# Instalar hamachi y quamachi ############
+
+	5 )
+	clear
+	echo
+	echo -n "¿Instalar hamachi y quamachi? (s/n): "
+	read respuesta
+		if [ "$respuesta" = "s" ];
+			then
+			echo
+			cd /home/$USER
+			sudo apt-get install python python-qt4 make grep libqt4-core pyqt4-dev-tools
+			wget $DESCARGA2
+			sleep 1	
+			if [ `uname -m` = x86_64 ];
+				then
+				sudo dpkg -i --force-architecture hamachi_0.9.9.9-20_i386.deb
+			else
+				sudo dpkg -i hamachi_0.9.9.9-20_i386.deb
+			fi
+			if [ "$?" = "0" ];
+				then
+				echo
+				echo "hamachi ha sido instalado"
+				echo
+				wget $DESCARGAQUAMACHI
+				sleep 1
+				if [ `uname -m` = x86_64 ];
+					then
+					sudo dpkg -i --force-architecture quamachi_0.4.1-1_i386.deb
+				else
+					sudo dpkg -i quamachi_0.4.1-1_i386.deb
+				fi
+				if [ "$?" = "0" ];
+					then
+					echo
+					echo "quamachi ha sido instalado"
+					echo
+					echo "*** Para la configuracion de arranque, cierre la sesion y vuelva a abrirla ***"
+					echo
+				else
+					echo
+					echo "No se ha podido instalar quamachi."
+					echo
+				fi
+			else
+				echo
+				echo "No se ha podido instalar hamachi."
+				echo
+			fi
+			rm hamachi_0.9.9.9-20_i386.deb
+			rm quamachi_0.4.1-1_i386.deb
+			if [ "$?" = "0" ];
+				then
+				echo
+				read -p "Pulse Enter para continuar " var
+				echo
+			fi
+		else
+			echo
+			echo "hamachi no sera instalado"
+			echo
+		fi		
+	;;
+
+
+################ Copia de configuraciones/Eliminar hamachi menu ################
+	6 )
+	clear
+	menueliminarocopia=
+	until [ "$menueliminarocopia" = "0" ]; do
+		clear
+		echo
+		echo "Eliminar o hacer copias de seguridad de hamachi"
+		echo
+		echo "-------------------------------------------------------------"
+		echo
+		echo "1. Copia de seguridad de las configuraciones de usuario de hamachi"
+		echo "2. Restaurar confifuraciones de usuario de hamachi"
+		echo "3. Eliminar hamachi"
+		echo "4. Eliminar haguichi"
+		echo "5. Eliminar ghamachi"
+		echo "6. Eliminar hamachi-gui"
+		echo "7. Eliminar quamachi y hamachi"
+		echo "0. Salir"
+		echo
+		echo "-------------------------------------------------------------"
+		echo
+		echo -n "Selecciona un numero [0-7]: "
+	read opceliminarocopia
+	
+	echo
+
+	case $opceliminarocopia in
+
+################ Configuracion copias de seguridad de hamachi ################
+		1 )
+		echo
+		CARPETAHAMACHI
+		echo -n "¿Hacer copias de seguridad de las configuraciones de usuario de hamachi? (s/n): "
+		read respuesta
+		if [ "$respuesta" = "s" ];
+			then
+			COPIAHAMACHI
+		else
+			echo
+			echo "Saliendo al menu..."
+			echo
+		fi
+		;;
+
+################ Restaurar configuraciones de hamachi ################
+		2 )
+		echo
+		echo -n "¿Restaurar configuraciones de usuario de hamachi? (s/n): "
+		read respuesta
+		if [ "$respuesta" = "s" ];
+			then
+			echo
+			echo "Buscando sistema de usuarios..."
+			echo
+			cat /etc/passwd | grep "/bin/bash" | cut -d: -f1
+			echo
+			echo -n "¿De que sistema de usuarios quiere restaurar las configuraciones de usuariode hamachi?: "
+			read COPIARARCHIVOS
+			if [ "$COPIARARCHIVOS" = "root" ];
+				then
+				if [ ! -e /home/$USER/Desktop/hamachi_backup_root.tar.gz ];
+					then
+					echo
+					echo "hamachi_backup_root.tar.gz no existe!"
+					echo
+				else
+					echo "Copias de seguridad de archivos de hamachi de $COPIARARCHIVOS al Escritorio..."
+					if [ ! -d /root/.hamachi ];
+						then
+						sudo mkdir /root/.hamachi
+					fi
+					sudo tar -zxvf /home/$USER/Desktop/hamachi_backup_root.tar.gz -C /root/.hamachi
+					echo
+				fi
+			else
+				if [ ! -e /home/$USER/Desktop/hamachi_backup.tar.gz ];
+					then
+					echo
+					echo "hamachi_backup.tar.gz no exite!"
+					echo
+				else
+					echo "Copias de seguridad de archivos de hamachi de $COPIARARCHIVOS al Escritorio..."
+					if [ ! -d /root/.hamachi ];
+						then
+						sudo mkdir /root/.hamachi
+					fi
+					sudo tar -zxvf /home/$USER/Desktop/hamachi_backup.tar.gz -C /home/$USER/.hamachi
+					echo
+				fi
+			fi
+		else               	
+			echo
+			echo "Saliendo al menu..."
+			echo
+		fi
+		;;
+
+################ Eliminar hamachi ################
+		3 )
+		echo
+		HAMACHIINSTALADO
+		echo
+		echo -n "¿Quiere hacer una copia de seguridad de sus configuraciones antes de eliminar hamachi? (s/n): "
+		read respuesta
+		if [ "$respuesta" = "s" ];
+			then
+			COPIAHAMACHI
+			sleep 1
+			ELIMINARHAMACHI
+		else
+			ELIMINARHAMACHI		
+		fi
+		;;
+
+################ Eliminar haguichi ################
+		4 )
+		echo
+		HAGUICHIINSTALADO
+		echo -n "¿Eliminar haguichi? (s/n): "
+		read respuesta
+		if [ "$respuesta" = "s" ];
+			then
+			sudo apt-get -y remove --purge haguichi
+			echo
+			rm -vfR ~/gconf/apps/haguichi
+			sudo rm -vf /etc/xdg/autostart/haguichi.desktop
+			sudo rm -vfR /usr/local/lib/haguichi
+			sudo rm -vf /usr/local/share/applications/haguichi.desktop
+			sudo rm -vfR /usr/share/doc/haguichi
+			sleep 1
+			sudo killall tuncfg
+			sleep 1
+			sudo update-rc.d -f tuncfg remove
+			sleep 1
+			sudo rm -vf /etc/init.d/tuncfg
+			echo
+			if [ "$?" = "0" ];
+				then
+				echo
+				echo "hamguichi ha sido eliminado!"
+				echo
+			else
+				echo
+				echo "hamaguichi no ha podido ser eliminado."
+				echo
+			fi
+		else
+			echo
+			echo "haguichi no ha sido eliminado"
+			echo
+		fi
+		;;
+						
+
+################ Eliminar ghamachi ################
+		5 )
+		echo
+		GHAMACHIINSTALADO
+		echo -n "¿Eliminar ghamachi? (s/n): "
+		read respuesta
+		if [ "$respuesta" = "s" ];
+			then
+			echo
+			sudo rm -vf /usr/share/pixmaps/hamachi.png
+			sudo rm -vf /usr/bin/ghamachi
+			sudo rm -vf /usr/share/applications/ghamachi.desktop
+			sudo rm -vf /home/$USER/.config/autostart/ghamachi.desktop
+			sleep 1
+			sudo killall tuncfg
+			sleep 1
+			sudo update-rc.d -f tuncfg remove
+			sleep 1
+			sudo rm -vf /etc/init.d/tuncfg
+			echo
+			if [ "$?" = "0" ];
+				then
+				echo
+				echo "ghamachi fue eliminado!"
+				echo
+			else
+				echo
+				echo "ghamachi no pudo ser eliminado."
+				echo
+			fi
+		else
+			echo
+			echo "ghamachi no ha sido eliminado"
+			echo
+		fi
+		;;
+
+################ Eliminar hamachi-gui ################
+		6 )
+		echo
+		HAMACHIGUIINSTALADO
+		echo -n "¿Eliminar hamachi-gui? (s/n): "
+		read respuesta
+		if [ "$respuesta" = "s" ];
+			then
+			echo
+			sudo dpkg -r hamachi-gui
+			sudo rm -vf /usr/share/applications/hamachi-gui.desktop
+			sleep 1
+			sudo killall tuncfg
+			sleep 1
+			sudo update-rc.d -f tuncfg remove
+			sleep 1
+			sudo rm -vf /etc/init.d/tuncfg
+			echo
+			if [ "$?" = "0" ];
+				then
+				echo
+				echo "hamachi-gui ha sido eliminado!"
+				echo
+			else
+				echo
+				echo "hamachi-gui no ha podido ser eliminado."
+				echo
+			fi
+		else
+			echo
+			echo "hamachi-gui no ha sido eliminado"
+			echo
+		fi
+		;;
+
+################ Eliminar hamachi y quamachi ################
+		7 )
+		echo -n "¿Eliminar hamachi y quamachi? (s/n): "
+		read respuesta
+		if [ "$respuesta" = "s" ];
+			then
+			sudo dpkg -r hamachi
+			echo
+			echo "Hamachi eliminado"
+			echo
+			sudo dpkg -r quamachi
+			echo
+			echo "Quamachi eliminado"
+			echo
+		else
+			echo
+			echo "hamachi quamachi no seran eliminado"
+			echo
+		fi
+		;;
+
+################ Fin del Menu de Copia de seguridad/Eliminar hamachi ################
+		0 )
+		echo "Saliendo ..."
+		echo
+		break
+		;;
+
+		* )
+		echo "No es un numero correcto! Seleciona un numero [0-7]: "
+		echo
+		;;
+
+	esac
+	done
+	;;
+
+################ Fin del Script ################
+	0 )
+	echo 
+	echo "Gracias por utilizar este script, por favor visite portalubuntu.blogspot.com ante cualquier problema"
+	echo
+	read -p "Pulse Enter para salir " var
+	echo
+	exit 0
+	;;
+
+	* )
+	echo "No es un numero correcto! Seleciona un numero [0-6]: "
+	echo
+	;;
+
+esac
+done
