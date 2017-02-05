@@ -1,6 +1,8 @@
 tasks:
+#Con el plugin de The Pirate Bay
   Arrow:
     html:
+      #Introduce unos parametro de buscaque en thepiratebay y copia la URL
       url: https://thepiratebay.org/search/Arrow%201080p%20HDTV%20X264%20DIMENSION%20ettv/0/99/0
       title_from: url
       links_re: [ magnet ]
@@ -9,6 +11,8 @@ tasks:
           from: url
           extract: '&dn=([^&](/^&)+)'
     accept_all: yes
+    limit_new: 4 
+    #Para enviarlo directamente a Transmission
     transmission:
       host: localhost
       port: 9091
@@ -22,6 +26,7 @@ tasks:
           from: url
           extract: '&dn=([^&](/^&)+)'
     accept_all: yes
+    limit_new: 4 
     transmission:
       host: localhost
       port: 9091
@@ -35,6 +40,7 @@ tasks:
           from: url
           extract: '&dn=([^&](/^&)+)'
     accept_all: yes
+    limit_new: 4 
     transmission:
       host: localhost
       port: 9091
@@ -48,6 +54,7 @@ tasks:
           from: url
           extract: '&dn=([^&](/^&)+)'
     accept_all: yes
+    limit_new: 4 
     transmission:
       host: localhost
       port: 9091
@@ -61,6 +68,7 @@ tasks:
           from: url
           extract: '&dn=([^&](/^&)+)'
     accept_all: yes
+    limit_new: 4 
     transmission:
       host: localhost
       port: 9091
@@ -74,6 +82,7 @@ tasks:
           from: url
           extract: '&dn=([^&](/^&)+)'
     accept_all: yes
+    limit_new: 4 
     transmission:
       host: localhost
       port: 9091
@@ -87,6 +96,7 @@ tasks:
           from: url
           extract: '&dn=([^&](/^&)+)'
     accept_all: yes
+    limit_new: 4 
     transmission:
       host: localhost
       port: 9091
@@ -100,6 +110,7 @@ tasks:
           from: url
           extract: '&dn=([^&](/^&)+)'
     accept_all: yes
+    limit_new: 4 
     transmission:
       host: localhost
       port: 9091
@@ -113,6 +124,7 @@ tasks:
           from: url
           extract: '&dn=([^&](/^&)+)'
     accept_all: yes
+    limit_new: 4 
     transmission:
       host: localhost
       port: 9091
@@ -126,6 +138,7 @@ tasks:
           from: url
           extract: '&dn=([^&](/^&)+)'
     accept_all: yes
+    limit_new: 4 
     transmission:
       host: localhost
       port: 9091
@@ -139,6 +152,15 @@ tasks:
           from: url
           extract: '&dn=([^&](/^&)+)'
     accept_all: yes
+    limit_new: 4 
+    transmission:
+      host: localhost
+      port: 9091
+  #Feeds de series individuales
+  Elementary:
+    rss: http://feed43.com/0803017675740248.xml
+    all_series: yes
+    limit_new: 4  
     transmission:
       host: localhost
       port: 9091
@@ -156,4 +178,52 @@ tasks:
     transmission:
       host: localhost
       port: 9091
-      
+  Homeland:
+    rss: http://feed43.com/7357283330158681.xml
+    all_series: yes
+    limit_new: 4  
+    transmission:
+      host: localhost
+      port: 9091
+  Modern Family:
+    rss: http://feed43.com/4442715843058374.xml
+    all_series: yes
+    limit_new: 4  
+    transmission:
+      host: localhost
+      port: 9091
+  NCIS:
+    rss: http://feed43.com/1482251266070322.xml
+    all_series: yes
+    limit_new: 4  
+    transmission:
+      host: localhost
+      port: 9091
+  Quantico:
+    rss: http://feed43.com/1067834740872671.xml
+    all_series: yes
+    limit_new: 4  
+    transmission:
+      host: localhost
+      port: 9091
+  Shadowhunters:
+    rss: http://feed43.com/4783505810684144.xml
+    all_series: yes
+    limit_new: 4  
+    transmission:
+      host: localhost
+      port: 9091
+  Suits:
+    rss: http://feed43.com/5673245431578516.xml
+    all_series: yes
+    limit_new: 4  
+    transmission:
+      host: localhost
+      port: 9091
+  The Walking Dead:
+    rss: http://feed43.com/3185416182850181.xml
+    all_series: yes
+    limit_new: 4  
+    transmission:
+      host: localhost
+      port: 9091
