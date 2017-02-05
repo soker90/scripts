@@ -1,0 +1,159 @@
+tasks:
+  Arrow:
+    html:
+      url: https://thepiratebay.org/search/Arrow%201080p%20HDTV%20X264%20DIMENSION%20ettv/0/99/0
+      title_from: url
+      links_re: [ magnet ]
+    manipulate:
+      - title:
+          from: url
+          extract: '&dn=([^&](/^&)+)'
+    accept_all: yes
+    transmission:
+      host: localhost
+      port: 9091
+  DCs Legends of Tomorrow:
+    html:
+      url: https://thepiratebay.org/search/DCs.Legends.of.Tomorrow.720p.HDTV.X264-DIMENSION[ettv]/0/99/0
+      title_from: url
+      links_re: [ magnet ]
+    manipulate:
+      - title:
+          from: url
+          extract: '&dn=([^&](/^&)+)'
+    accept_all: yes
+    transmission:
+      host: localhost
+      port: 9091
+  Colony:
+    html:
+      url: https://thepiratebay.org/search/Colony%20fleet/0/99/0
+      title_from: url
+      links_re: [ magnet ]
+    manipulate:
+      - title:
+          from: url
+          extract: '&dn=([^&](/^&)+)'
+    accept_all: yes
+    transmission:
+      host: localhost
+      port: 9091
+  Lucifer:
+    html:
+      url: https://thepiratebay.org/search/Lucifer%20720p%20HDTV%20X264%20DIMENSION[ettv]/0/99/0
+      title_from: url
+      links_re: [ magnet ]
+    manipulate:
+      - title:
+          from: url
+          extract: '&dn=([^&](/^&)+)'
+    accept_all: yes
+    transmission:
+      host: localhost
+      port: 9091
+  Marvel Agents of SHIELD:
+    html:
+      url: https://thepiratebay.org/search/Marvel%20Agents%20of%20SHIELD%20720p%20WEB%20DL%20x264/0/99/0
+      title_from: url
+      links_re: [ magnet ]
+    manipulate:
+      - title:
+          from: url
+          extract: '&dn=([^&](/^&)+)'
+    accept_all: yes
+    transmission:
+      host: localhost
+      port: 9091
+  Supergirl:
+    html:
+      url: https://thepiratebay.org/search/Supergirl.1080p.HDTV.X264-DIMENSION[ettv]/0/99/0
+      title_from: url
+      links_re: [ magnet ]
+    manipulate:
+      - title:
+          from: url
+          extract: '&dn=([^&](/^&)+)'
+    accept_all: yes
+    transmission:
+      host: localhost
+      port: 9091
+  Teen Wolf:
+    html:
+      url: https://thepiratebay.org/search/Teen%20Wolf%20720p%20HDTV%20x264%20KILLERS[ettv]/0/99/0
+      title_from: url
+      links_re: [ magnet ]
+    manipulate:
+      - title:
+          from: url
+          extract: '&dn=([^&](/^&)+)'
+    accept_all: yes
+    transmission:
+      host: localhost
+      port: 9091
+  The 100:
+    html:
+      url: https://thepiratebay.org/search/The%20100%20720p%20HDTV%20x264%20AVS/0/99/0
+      title_from: url
+      links_re: [ magnet ]
+    manipulate:
+      - title:
+          from: url
+          extract: '&dn=([^&](/^&)+)'
+    accept_all: yes
+    transmission:
+      host: localhost
+      port: 9091
+  The Big Bang Theory:
+    html:
+      url: https://thepiratebay.org/search/The%20Big%20Bang%20Theory%201080p%20HDTV%20X264%20DIMENSION[ettv]/0/99/0
+      title_from: url
+      links_re: [ magnet ]
+    manipulate:
+      - title:
+          from: url
+          extract: '&dn=([^&](/^&)+)'
+    accept_all: yes
+    transmission:
+      host: localhost
+      port: 9091
+  The Flash:
+    html:
+      url: https://thepiratebay.org/search/The%20Flash%202014%201080p%20HDTV%20X264%20DIMENSION[ettv]/0/99/0
+      title_from: url
+      links_re: [ magnet ]
+    manipulate:
+      - title:
+          from: url
+          extract: '&dn=([^&](/^&)+)'
+    accept_all: yes
+    transmission:
+      host: localhost
+      port: 9091
+  The Vampire Diaries:
+    html:
+      url: https://thepiratebay.org/search/The%20Vampire%20Diaries%20720p%20HDTV%20X264%20DIMENSION[ettv]/0/99/0
+      title_from: url
+      links_re: [ magnet ]
+    manipulate:
+      - title:
+          from: url
+          extract: '&dn=([^&](/^&)+)'
+    accept_all: yes
+    transmission:
+      host: localhost
+      port: 9091
+  Emerald City:
+    rss: http://feed43.com/7568141026674473.xml
+    all_series: yes
+    limit_new: 4  
+    transmission:
+      host: localhost
+      port: 9091
+  Grimm:
+    rss: http://feed43.com/2328182512175442.xml
+    all_series: yes
+    limit_new: 4  
+    transmission:
+      host: localhost
+      port: 9091
+      
