@@ -16,20 +16,6 @@ tasks:
     transmission:
       host: localhost
       port: 9091
-  DCs Legends of Tomorrow:
-    html:
-      url: https://thepiratebay.org/search/DCs.Legends.of.Tomorrow.720p.HDTV.X264-DIMENSION[ettv]/0/99/0
-      title_from: url
-      links_re: [ magnet ]
-    manipulate:
-      - title:
-          from: url
-          extract: '&dn=([^&](/^&)+)'
-    accept_all: yes
-    limit_new: 4 
-    transmission:
-      host: localhost
-      port: 9091
   Colony:
     html:
       url: https://thepiratebay.org/search/Colony%20fleet/0/99/0
@@ -44,9 +30,9 @@ tasks:
     transmission:
       host: localhost
       port: 9091
-  Lucifer:
+  DCs Legends of Tomorrow:
     html:
-      url: https://thepiratebay.org/search/Lucifer%20720p%20HDTV%20X264%20DIMENSION[ettv]/0/99/0
+      url: https://thepiratebay.org/search/DCs%20Legends%20of%20Tomorrow%20720p%20HDTV%20X264%20DIMENSION[ettv]/0/99/0
       title_from: url
       links_re: [ magnet ]
     manipulate:
@@ -54,7 +40,7 @@ tasks:
           from: url
           extract: '&dn=([^&](/^&)+)'
     accept_all: yes
-    limit_new: 4 
+    limit_new: 2 
     transmission:
       host: localhost
       port: 9091
@@ -131,20 +117,6 @@ tasks:
   The Flash:
     html:
       url: https://thepiratebay.org/search/The%20Flash%202014%201080p%20HDTV%20X264%20DIMENSION[ettv]/0/99/0
-      title_from: url
-      links_re: [ magnet ]
-    manipulate:
-      - title:
-          from: url
-          extract: '&dn=([^&](/^&)+)'
-    accept_all: yes
-    limit_new: 4 
-    transmission:
-      host: localhost
-      port: 9091
-  The Vampire Diaries:
-    html:
-      url: https://thepiratebay.org/search/The%20Vampire%20Diaries%20720p%20HDTV%20X264%20DIMENSION[ettv]/0/99/0
       title_from: url
       links_re: [ magnet ]
     manipulate:
