@@ -10,11 +10,10 @@
 
 
 //Cabecera
-$('#main-nav ul:first').html('<li><a href="/shows/trending">TV</a></li><li><a href="/movies/trending">Peliculas</a></li><li><a href="/calendars">Calendario</a></li>')
-$('#main-nav ul:last').html('<li><a href="/discover">Descubrir</a></li><li><a href="/apps">Aplicaciones</a></li><li><a href="/vip">VIP</a></li>')
+$('#main-nav ul:first').html('<li><a href="/shows/trending">TV</a></li><li><a href="/movies/trending">Peliculas</a></li><li><a href="/calendars">Calendario</a></li>');
+$('#main-nav ul:last').html('<li><a href="/discover">Descubrir</a></li><li><a href="/apps">Aplicaciones</a></li><li><a href="/vip">VIP</a></li>');
 
-$('#user-menu ul').html('<li><a href="/dashboard">Inicio</a></li><li><a href="/users/soker">Perfil</a></li><li><a href="/users/soker/history">Historial</a></li><li><a href="/users/soker/progress">Progreso</a></li><li><a href="/users/soker/collection">Colección</a></li><li><a href="/users/soker/ratings">
-                        caciones</a></li><li><a href="/users/soker/lists">Listas</a></li><li><a href="/users/soker/comments">Comentarios</a></li><li><a href="/users/soker/network">Amigos</a></li><li><a href="/widgets">Widgets</a></li><li><a href="/users/soker/year">Revisión del año</a></li><li><a href="/settings">Configuración</a></li><li><a href="/logout">Salir</a></li>')
+$('#user-menu ul').html('<li><a href="/dashboard">Inicio</a></li><li><a href="/users/soker">Perfil</a></li><li><a href="/users/soker/history">Historial</a></li><li><a href="/users/soker/progress">Progreso</a></li><li><a href="/users/soker/collection">Colección</a></li><li><a href="/users/soker/ratings">Calificaciones</a></li><li><a href="/users/soker/lists">Listas</a></li><li><a href="/users/soker/comments">Comentarios</a></li><li><a href="/users/soker/network">Amigos</a></li><li><a href="/widgets">Widgets</a></li><li><a href="/users/soker/year">Revisión del año</a></li><li><a href="/settings">Configuración</a></li><li><a href="/logout">Salir</a></li>');
 
 $('#links-wrapper div a:first').text('Perfil')
 $('#links-wrapper div a:nth-child(2)').text('Historial')
@@ -74,6 +73,18 @@ if(document.title.indexOf("progress") > -1) {
   text = text.replace(/Collected/g,'Coleccionados');
   $('.subnav-wrapper div:first div:first span').html(text);
   
+  var text = $('.subnav-wrapper div:first div:nth-child(2) div:first div:first div:first a:nth-child(3) span:last').text();
+  text = text.replace('show','serie');
+ $('.subnav-wrapper div:first div:nth-child(2) div:first div:first div:first a:nth-child(3) span:last').text(text);
+  
+  $('.subnav-wrapper div:nth-child(2) span:nth-child(4) ul li:first a').text('Mostrar todo');
+  $('.subnav-wrapper div:nth-child(2) span:nth-child(4) ul li:nth-child(3)').text('Ocultar');
+  $('.subnav-wrapper div:nth-child(2) span:nth-child(4) ul li:nth-child(4) a').text('Completadas');
+  $('.subnav-wrapper div:nth-child(2) span:nth-child(4) ul li:nth-child(5) a').text('No Completadas');
+  $('.subnav-wrapper div:nth-child(2) span:nth-child(4) ul li:nth-child(6) a').text('Finalizadas / Canceladas');
+  $('.subnav-wrapper div:nth-child(2) span:nth-child(4) ul li:nth-child(7) a').text('En Emisión');
+  
+    
 }
 
 
